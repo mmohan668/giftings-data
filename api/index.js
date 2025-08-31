@@ -2,9 +2,9 @@
 import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
+import serverless from "serverless-http";
 
 const app = express();
-const PORT = 3000;
 const DRIVE_URL = `https://drive.google.com/uc?export=download&id=1xOc5eudRVQgjXE85cAS_4voYqtcw_E8H`;
 
 let cachedData = null; // cache storage
@@ -13,7 +13,7 @@ const CACHE_TTL = 60 * 60 * 24 * 1000; // cache time (1 day)
 
 app.use(
   cors({
-    origin: "http://localhost:4200", // Angular dev server
+    origin: "*", // Angular dev server
   })
 );
 
@@ -36,6 +36,4 @@ app.get("/api/data", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+export const handler = serverless(app);
