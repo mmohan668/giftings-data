@@ -2,9 +2,9 @@
 import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
-import serverless from "serverless-http";
 
 const app = express();
+const PORT = process.env.PORT | 3000;
 const DRIVE_URL = `https://drive.google.com/uc?export=download&id=1xOc5eudRVQgjXE85cAS_4voYqtcw_E8H`;
 
 let cachedData = null; // cache storage
@@ -17,7 +17,7 @@ app.use(
   })
 );
 
-app.get("/api/data", async (req, res) => {
+app.get("/", async (req, res) => {
   try {
     // Check cache
     if (cachedData && Date.now() - lastFetched < CACHE_TTL) {
@@ -36,4 +36,6 @@ app.get("/api/data", async (req, res) => {
   }
 });
 
-export const handler = serverless(app);
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
